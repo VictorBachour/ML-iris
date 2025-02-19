@@ -1,7 +1,6 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.model_selection import train_test_split
 class Model(nn.Module):
@@ -62,3 +61,16 @@ if __name__ == "__main__":
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
+
+
+    with torch.no_grad():
+        y_eval = model.forward(X_test)
+        loss = criterion(y_eval, y_test)
+    correct = 0
+    with torch.no_grad():
+        for i, data in enumerate(X_test):
+            y_val = model.forward(data)
+            print(f'{i + 1}.) {str(y_val)} \t {y_test[i]} \t {y_val.argmax().item()}')
+            if y_val.argmax().item() == y_test[i]:
+                correct += 1
+        print(correct)
