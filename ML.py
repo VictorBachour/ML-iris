@@ -21,7 +21,7 @@ class Model(nn.Module):
 
 if __name__ == "__main__":
     torch.manual_seed(42)
-    Model()
+    model = Model()
     url = 'https://gist.githubusercontent.com/netj/8836201/raw/6f9306ad21398ea43cba4f7d537619d0e07d5ae3/iris.csv'
     my_df = pd.read_csv(url)
     my_df['variety'] = my_df['variety'].map({'Setosa': 0, 'Versicolor': 1, 'Virginica': 2}).astype(int)
@@ -43,4 +43,19 @@ if __name__ == "__main__":
 
     criterion = nn.CrossEntropyLoss()
 
-    optimizer = Ada
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
+
+
+    Epochs = 100
+    losses = []
+
+    for i in range(Epochs):
+        y_pred = model.forward(X_train)
+
+        loss = criterion(y_pred, y_train)
+
+        losses.append(loss.detach.numpy())
+
+        if i % 10 == 0:
+            print(f'Epoch: {i} and loss: {loss}')
+
