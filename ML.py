@@ -3,6 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import matplotlib.pyplot as plt
 import pandas as pd
+from sklearn.model_selection import train_test_split
 class Model(nn.Module):
 
     def __init__(self, in_features=4, h1=8, h2=9, out_features=3):
@@ -23,5 +24,23 @@ if __name__ == "__main__":
     Model()
     url = 'https://gist.githubusercontent.com/netj/8836201/raw/6f9306ad21398ea43cba4f7d537619d0e07d5ae3/iris.csv'
     my_df = pd.read_csv(url)
-    my_df['variety'] = 0.0
-    x = my_df.drop('variety', axis=1)
+    my_df['variety'] = my_df['variety'].map({'Setosa': 0, 'Versicolor': 1, 'Virginica': 2}).astype(int)
+
+
+    X = my_df.drop('variety', axis=1)
+    y = my_df['variety']
+
+    X = X.values
+    y = y.values
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=41)
+
+    X_train = torch.FloatTensor(X_train)
+    X_test = torch.FloatTensor(X_test)
+
+    y_train = torch.LongTensor(y_train)
+    y_test = torch.LongTensor(y_test)
+
+    criterion = nn.CrossEntropyLoss()
+
+    optimizer = Ada
